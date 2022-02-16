@@ -2965,7 +2965,7 @@ oscKeyOff (struct b_tonegen* t, unsigned char keyNumber, unsigned char realKey)
 		}
 	} /* if key was active */
 
-    printf ("\rOFF:%3d", keyNumber); fflush (stdout);
+    //printf ("\rOFF:%3d", keyNumber); fflush (stdout);
 }
 
 /**
@@ -3000,7 +3000,7 @@ oscKeyOn (struct b_tonegen* t, unsigned char keyNumber, unsigned char realKey)
 		t->msgQueueWriter = t->msgQueue;
 	}
 
-    printf ("\rON :%3d", keyNumber); fflush (stdout);
+    //printf ("\rON :%3d", keyNumber); fflush (stdout);
 }
 
 /* ----------------------------------------------------------------

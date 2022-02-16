@@ -21,46 +21,90 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "PluginEditor.h"
 
 //==============================================================================
-OpenPianoAudioProcessorEditor::OpenPianoAudioProcessorEditor (OpenPianoAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p), midiKeyboard (audioProcessor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard)
+OpenB3AudioProcessorEditor::OpenB3AudioProcessorEditor (OpenB3AudioProcessor& p)
+    : AudioProcessorEditor (&p),
+      audioProcessor (p),
+      midiKeyboardUpperManual(audioProcessor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard),
+      midiKeyboardLowerManual(audioProcessor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard),
+      midiKeyboardPedalBoard(audioProcessor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    midiKeyboard.setName ("Upper Manual");
-    midiKeyboard.setAvailableRange(36, 96);
-    midiKeyboard.setKeyWidth(24);
-    midiKeyboard.setOctaveForMiddleC(4);
-    addAndMakeVisible (midiKeyboard);
+    init_keyboards();
 
-    keyboardState.addListener (this);
-
-    int n_white_keys = 36; // 5 octaves
-    setSize (24*n_white_keys, 128);
+    setSize (keyboards_width, keyboards_height);
 }
 
-OpenPianoAudioProcessorEditor::~OpenPianoAudioProcessorEditor()
+OpenB3AudioProcessorEditor::~OpenB3AudioProcessorEditor()
 {
-    keyboardState.removeListener (this);
+    keyboardState.removeListener(this);
 }
 
 //==============================================================================
-void OpenPianoAudioProcessorEditor::paint (juce::Graphics& g)
+void OpenB3AudioProcessorEditor::paint (juce::Graphics& g)
 {
+    g.fillAll(Colours::black);
 }
 
-void OpenPianoAudioProcessorEditor::resized()
+void OpenB3AudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-    midiKeyboard.setBounds(0, 0, getWidth(), getHeight());
+    midiKeyboardUpperManual.setBounds(0, 0,               getWidth(), getHeight()/3);
+    midiKeyboardLowerManual.setBounds(0, getHeight()/3,   getWidth(), getHeight()/3);
+    midiKeyboardPedalBoard.setBounds (white_key_width*(n_white_keys_manual-n_white_keys_pedalboard)/2, // To the middle
+                                      2*getHeight()/3,
+                                      n_white_keys_pedalboard*white_key_width,
+                                      getHeight()/3);
 }
 
-void OpenPianoAudioProcessorEditor::handleNoteOn (juce::MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
+void OpenB3AudioProcessorEditor::handleNoteOn (juce::MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
 {
     keyboardState.noteOn(midiChannel, midiNoteNumber, velocity);
 }
 
-void OpenPianoAudioProcessorEditor::handleNoteOff (juce::MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
+void OpenB3AudioProcessorEditor::handleNoteOff (juce::MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
 {
-    keyboardState.noteOff(midiChannel, midiNoteNumber, velocity);
+    keyboardState.noteOn(midiChannel, midiNoteNumber, velocity);
+}
+
+void OpenB3AudioProcessorEditor::init_keyboards()
+{
+    white_key_width = 24;
+    n_white_keys_manual = 36; // 5 octaves
+    n_white_keys_pedalboard = 19;
+    n_manuals = 3;
+    manual_height = 128;
+    keyboards_width = white_key_width*n_white_keys_manual;
+    keyboards_height = manual_height*n_manuals;
+
+    // Upper manual
+    midiKeyboardUpperManual.setName ("Upper Manual");
+    midiKeyboardUpperManual.setTitle("Upper Manual");
+    midiKeyboardUpperManual.setAvailableRange(36, 96);
+    midiKeyboardUpperManual.setKeyWidth(white_key_width);
+    midiKeyboardUpperManual.setOctaveForMiddleC(4);
+    midiKeyboardUpperManual.setMidiChannel(1); // From 1 to 16
+    midiKeyboardUpperManual.setMidiChannelsToDisplay(0x1); // Binary mask, one bit for each channel
+    addAndMakeVisible (midiKeyboardUpperManual);
+
+    // Lower manual
+    midiKeyboardLowerManual.setName ("Lower Manual");
+    midiKeyboardLowerManual.setTitle ("Lower Manual");
+    midiKeyboardLowerManual.setAvailableRange(36, 96);
+    midiKeyboardLowerManual.setKeyWidth(white_key_width);
+    midiKeyboardLowerManual.setOctaveForMiddleC(4);
+    midiKeyboardLowerManual.setMidiChannel(2);
+    midiKeyboardLowerManual.setMidiChannelsToDisplay(0x2);
+    addAndMakeVisible (midiKeyboardLowerManual);
+
+    // Pedal board
+    midiKeyboardPedalBoard.setName ("Pedal Board");
+    midiKeyboardPedalBoard.setTitle ("Pedal Board");
+    midiKeyboardPedalBoard.setAvailableRange(36, 67);
+    midiKeyboardPedalBoard.setKeyWidth(white_key_width);
+    midiKeyboardPedalBoard.setOctaveForMiddleC(4);
+    midiKeyboardPedalBoard.setMidiChannel(3);
+    midiKeyboardPedalBoard.setMidiChannelsToDisplay(0x4);
+    addAndMakeVisible (midiKeyboardPedalBoard);
+
+    keyboardState.addListener(this);
 }

@@ -27,12 +27,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //==============================================================================
 /**
 */
-class OpenPianoAudioProcessor  : public juce::AudioProcessor
+class OpenB3AudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    OpenPianoAudioProcessor();
-    ~OpenPianoAudioProcessor() override;
+    OpenB3AudioProcessor();
+    ~OpenB3AudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -72,7 +72,7 @@ public:
 
 private:
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenPianoAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenB3AudioProcessor)
 
     Beatrix* beatrix;
 };

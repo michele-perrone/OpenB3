@@ -26,11 +26,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 /**
 */
 
-class OpenPianoAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::MidiKeyboardState::Listener
+class OpenB3AudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::MidiKeyboardState::Listener
 {
 public:
-    OpenPianoAudioProcessorEditor (OpenPianoAudioProcessor&);
-    ~OpenPianoAudioProcessorEditor() override;
+    OpenB3AudioProcessorEditor (OpenB3AudioProcessor&);
+    ~OpenB3AudioProcessorEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
@@ -39,13 +39,24 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    OpenPianoAudioProcessor& audioProcessor;
+    OpenB3AudioProcessor& audioProcessor;
+
+    juce::MidiKeyboardComponent midiKeyboardUpperManual;
+    juce::MidiKeyboardComponent midiKeyboardLowerManual;
+    juce::MidiKeyboardComponent midiKeyboardPedalBoard;
 
     juce::MidiKeyboardState keyboardState;
-    juce::MidiKeyboardComponent midiKeyboard;
-
     void handleNoteOn (juce::MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
     void handleNoteOff (juce::MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenPianoAudioProcessorEditor)
+    int white_key_width;
+    int n_white_keys_manual;
+    int n_white_keys_pedalboard;
+    int n_manuals;
+    int manual_height;    
+    int keyboards_width;
+    int keyboards_height;
+    void init_keyboards();
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenB3AudioProcessorEditor)
 };

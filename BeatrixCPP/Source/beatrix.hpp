@@ -25,7 +25,9 @@ struct Beatrix
     double SampleRateD = 48000.0;
     int    SampleRateI = 48000;
 
-    unsigned int defaultPreset[9] = { 8, 8, 6, 0, 0, 0, 0, 0, 0 };
+    unsigned int defaultPresetUpperManual[9] = { 8, 8, 6, 0, 0, 0, 0, 0, 0 };
+    unsigned int defaultPresetLowerManual[9] = { 8, 8, 8, 8, 0, 0, 0, 0, 8 };
+    unsigned int defaultPresetPedalBoard[9] =  { 8, 0, 0, 0, 0, 8, 0, 0, 0 };
 
     Beatrix(double sample_rate)
     {
@@ -96,9 +98,9 @@ struct Beatrix
 
         fprintf (stderr, "Drawbars : ");
         fflush (stderr);
-        setDrawBars (&inst, 0, defaultPreset);
-        setDrawBars (&inst, 1, defaultPreset);
-        setDrawBars (&inst, 2, defaultPreset);
+        setDrawBars (&inst, 0, defaultPresetUpperManual);
+        setDrawBars (&inst, 1, defaultPresetLowerManual);
+        setDrawBars (&inst, 2, defaultPresetPedalBoard);
 
         fprintf (stderr, "..done.\n");
         fflush (stderr);
@@ -138,11 +140,11 @@ struct Beatrix
      */
     void note_on(uint8_t midi_note)
     {
-        oscKeyOn (this->inst.synth, midi_note-36, midi_note-36);
+        oscKeyOn (this->inst.synth, midi_note, midi_note);
     }
     void note_off(uint8_t midi_note)
     {
-        oscKeyOff (this->inst.synth, midi_note-36, midi_note-36);
+        oscKeyOff (this->inst.synth, midi_note, midi_note);
     }
     void set_drawbars(unsigned int manual, unsigned int setting[])
     {
