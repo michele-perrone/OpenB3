@@ -1,3 +1,3 @@
 #include "global_definitions.h"
 
-double SampleRateD = 48000.0;
+double SampleRateD; // Initialized by BeatrixCPP's constructor

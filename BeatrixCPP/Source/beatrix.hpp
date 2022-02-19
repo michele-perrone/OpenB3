@@ -22,17 +22,13 @@ struct Beatrix
     char* defaultConfigFile    = NULL;
     char* defaultProgrammeFile = NULL;
 
-    double SampleRateD = 48000.0;
-    int    SampleRateI = 48000;
-
     unsigned int defaultPresetUpperManual[9] = { 8, 8, 6, 0, 0, 0, 0, 0, 0 };
     unsigned int defaultPresetLowerManual[9] = { 8, 8, 8, 8, 0, 0, 0, 0, 8 };
     unsigned int defaultPresetPedalBoard[9] =  { 8, 0, 0, 0, 0, 8, 0, 0, 0 };
 
     Beatrix(double sample_rate)
     {
-        SampleRateI = (int)sample_rate;
-        SampleRateD = sample_rate;
+        ::SampleRateD = sample_rate;
 
         memset (&inst, 0, sizeof (b_instance));
 
@@ -149,5 +145,12 @@ struct Beatrix
     void set_drawbars(unsigned int manual, unsigned int setting[])
     {
         setDrawBars (&this->inst, manual, setting);
+    }
+    /**
+     * @brief Set the rotation speed of the leslie speaker
+     */
+    void set_leslie_speed(int speed)
+    {
+        setRevSelect (this->inst.whirl, speed);
     }
 };
