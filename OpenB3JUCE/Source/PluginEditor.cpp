@@ -29,8 +29,11 @@ OpenB3AudioProcessorEditor::OpenB3AudioProcessorEditor (OpenB3AudioProcessor& p)
       midiKeyboardPedalBoard(audioProcessor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard)
 {
     init_keyboards();
+    setResizable(true, true);
 
-    setSize (keyboards_width, keyboards_height);
+    int screen_width = Desktop::getInstance().getDisplays().getPrimaryDisplay()->userArea.getWidth();
+    int screen_height = Desktop::getInstance().getDisplays().getPrimaryDisplay()->userArea.getHeight();
+    setSize (screen_height*3/4, screen_height/4);
 }
 
 OpenB3AudioProcessorEditor::~OpenB3AudioProcessorEditor()
@@ -46,14 +49,26 @@ void OpenB3AudioProcessorEditor::paint (juce::Graphics& g)
 
 void OpenB3AudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
-    midiKeyboardUpperManual.setBounds(0, 0,               getWidth(), getHeight()/3);
-    midiKeyboardLowerManual.setBounds(0, getHeight()/3,   getWidth(), getHeight()/3);
-    midiKeyboardPedalBoard.setBounds (white_key_width*(n_white_keys_manual-n_white_keys_pedalboard)/2, // To the middle
-                                      2*getHeight()/3,
-                                      n_white_keys_pedalboard*white_key_width,
-                                      getHeight()/3);
+    juce::Grid grid;
+
+    using Track = juce::Grid::TrackInfo;
+    grid.templateRows = { Track(1_fr), Track(1_fr), Track(1_fr) };
+    grid.templateColumns = { Track(1_fr), Track(1_fr), Track(1_fr) };
+    grid.rowGap = juce::Grid::Px(3);
+
+    midiKeyboardUpperManual.setKeyWidth(getLocalBounds().getWidth()/(float)n_white_keys_manual);
+    midiKeyboardLowerManual.setKeyWidth(getLocalBounds().getWidth()/(float)n_white_keys_manual);
+    midiKeyboardPedalBoard.setKeyWidth(getLocalBounds().getWidth()/(float)n_white_keys_manual);
+    grid.items =
+    {
+        GridItem(midiKeyboardUpperManual).withArea(1, 1, 2, 4),
+        GridItem(midiKeyboardLowerManual).withArea(2, 1, 3, 4),
+        GridItem(midiKeyboardPedalBoard).withWidth(midiKeyboardPedalBoard.getKeyWidth()*n_white_keys_pedalboard+1)
+                                        .withJustifySelf(juce::GridItem::JustifySelf::center)
+                                        .withArea(3, 2, 4, 3)
+    };
+    Rectangle localBounds = getLocalBounds();
+    grid.performLayout(localBounds);
 }
 
 void OpenB3AudioProcessorEditor::handleNoteOn (juce::MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
@@ -68,19 +83,14 @@ void OpenB3AudioProcessorEditor::handleNoteOff (juce::MidiKeyboardState*, int mi
 
 void OpenB3AudioProcessorEditor::init_keyboards()
 {
-    white_key_width = 24;
     n_white_keys_manual = 36; // 5 octaves
     n_white_keys_pedalboard = 19;
     n_manuals = 3;
-    manual_height = 128;
-    keyboards_width = white_key_width*n_white_keys_manual;
-    keyboards_height = manual_height*n_manuals;
 
     // Upper manual
     midiKeyboardUpperManual.setName ("Upper Manual");
     midiKeyboardUpperManual.setTitle("Upper Manual");
     midiKeyboardUpperManual.setAvailableRange(36, 96);
-    midiKeyboardUpperManual.setKeyWidth(white_key_width);
     midiKeyboardUpperManual.setOctaveForMiddleC(4);
     midiKeyboardUpperManual.setMidiChannel(1); // From 1 to 16
     midiKeyboardUpperManual.setMidiChannelsToDisplay(0x1); // Binary mask, one bit for each channel
@@ -90,7 +100,6 @@ void OpenB3AudioProcessorEditor::init_keyboards()
     midiKeyboardLowerManual.setName ("Lower Manual");
     midiKeyboardLowerManual.setTitle ("Lower Manual");
     midiKeyboardLowerManual.setAvailableRange(36, 96);
-    midiKeyboardLowerManual.setKeyWidth(white_key_width);
     midiKeyboardLowerManual.setOctaveForMiddleC(4);
     midiKeyboardLowerManual.setMidiChannel(2);
     midiKeyboardLowerManual.setMidiChannelsToDisplay(0x2);
@@ -100,7 +109,6 @@ void OpenB3AudioProcessorEditor::init_keyboards()
     midiKeyboardPedalBoard.setName ("Pedal Board");
     midiKeyboardPedalBoard.setTitle ("Pedal Board");
     midiKeyboardPedalBoard.setAvailableRange(36, 67);
-    midiKeyboardPedalBoard.setKeyWidth(white_key_width);
     midiKeyboardPedalBoard.setOctaveForMiddleC(4);
     midiKeyboardPedalBoard.setMidiChannel(3);
     midiKeyboardPedalBoard.setMidiChannelsToDisplay(0x4);

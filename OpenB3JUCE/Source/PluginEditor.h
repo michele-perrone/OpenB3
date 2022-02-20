@@ -49,13 +49,9 @@ private:
     void handleNoteOn (juce::MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
     void handleNoteOff (juce::MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
 
-    int white_key_width;
     int n_white_keys_manual;
     int n_white_keys_pedalboard;
     int n_manuals;
-    int manual_height;    
-    int keyboards_width;
-    int keyboards_height;
     void init_keyboards();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenB3AudioProcessorEditor)
