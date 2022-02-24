@@ -3,7 +3,7 @@
 ![](Documentation/Images/openB3_screenshot.png)
 
 ## Summary
-### [1. What is Open B3?](#what-is-open-piano)
+### [1. What is Open B3?](#what-is-open-b3)
 ### [2. How do I use it?](#how-do-i-use-it)
 ### [3. Building](#building)
 ### [4. Current state and road map](#current-state-and-road-map)
@@ -31,7 +31,7 @@ If you're wondering why is this an issue: people outside the GNU/Linux world rar
 - and even Android/iOS apps!
 
 ## How do I use it?
-A first binary release of Open B3 will be published once the C++ wrapper includes all the basic functionality of Beatrix and once the prototype of the JUCE user interface is completed. Until then, you can build Open B3 yourself (see #building).
+A first binary release of Open B3 will be published once the C++ wrapper includes all the basic functionality of Beatrix and once the prototype of the JUCE user interface is completed. Until then, you can build Open B3 yourself (see [building](#building)).
 
 ## Building
 To build Open B3, you will need CMake (version 3.15 or above), a C++ compiler (C++17 or above), and the latest version of the [JUCE](https://github.com/juce-framework/JUCE) library. Once you clone/download this repository, you need to clone/download a copy of JUCE inside it. You end up with this directory structure:
@@ -55,7 +55,7 @@ OpenB3
 Open B3 works, but the C++ wrapper doesn't expose all Beatrix's functionality yet. Right now, there's just three keyboards (upper&lower manual and pedalboard). Here's a short list of what needs to be done (it may change frequently):
 * [x] ~~Fix sample rate setting~~ - Fixed [HERE](https://github.com/michele-perrone/OpenB3/commit/47b80a901304214211a673c8e0176784a26215e3), but maybe `SampleRateD` shouldn't be global
 * [ ] Expose all sound parameters (vibrato, percussion, reverb, whirl, overdrive) - work in progress 
-* [ ] Design and implement a fully resizable in JUCE - work in progress (https://github.com/michele-perrone/OpenB3/commit/00c491b5d28e581899a2c92ce6e37e20fbc08296)
+* [ ] Design and implement a fully resizable in JUCE - work in progress ([00c491b5d28e581899a2c92ce6e37e20fbc08296](https://github.com/michele-perrone/OpenB3/commit/00c491b5d28e581899a2c92ce6e37e20fbc08296))
 * [ ] Expose/implement programs and program changes
 * [ ] Expose/implement configuration file loading and saving
 
