@@ -34,15 +34,15 @@ If you're wondering why is this an issue: people outside the GNU/Linux world rar
 A first binary release of Open B3 will be published once the C++ wrapper includes all the basic functionality of Beatrix and once the prototype of the JUCE user interface is completed. Until then, you can build Open B3 yourself (see [building](#building)).
 
 ## Building
-To build Open B3, you will need CMake (version 3.15 or above), a C++ compiler (C++17 or above), and the latest version of the [JUCE](https://github.com/juce-framework/JUCE) library. Once you clone/download this repository, you need to clone/download a copy of JUCE inside it. You end up with this directory structure:
+To build Open B3, you will need CMake (version 3.15 or above), a C++ compiler (C++17 or above), and the latest version of the [JUCE](https://github.com/juce-framework/JUCE) library. Once you clone/download this repository, you need to clone/download a copy of JUCE inside the `OpenB3JUCE/` folder. You end up with this directory structure:
 
 ```
 OpenB3
-├── JUCE/
 ├── BeatrixCPP/
 ├   ├── Source/
 ├   └── CMakeLists.txt
 └── OpenB3JUCE/
+    ├── JUCE/
     ├── Source/
     └── CMakeLists.txt
 ```
