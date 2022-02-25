@@ -24,7 +24,7 @@ struct Beatrix
 
     unsigned int defaultPresetUpperManual[9] = { 8, 8, 6, 0, 0, 0, 0, 0, 0 };
     unsigned int defaultPresetLowerManual[9] = { 8, 8, 8, 8, 0, 0, 0, 0, 8 };
-    unsigned int defaultPresetPedalBoard[9] =  { 8, 0, 0, 0, 0, 8, 0, 0, 0 };
+    unsigned int defaultPresetPedalBoard[9] =  { 8, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     Beatrix(double sample_rate)
     {
@@ -101,11 +101,11 @@ struct Beatrix
         fprintf (stderr, "..done.\n");
         fflush (stderr);
     }
-    void get_next_block(float* buffer_L, float* buffer_R, size_t n_channels, size_t nframes)
+    void get_next_block(float* buffer_L, float* buffer_R, int nframes)
     {
         int boffset = BUFFER_SIZE_SAMPLES;
 
-        size_t written = 0;
+        int written = 0;
 
         while (written < nframes)
         {
@@ -120,10 +120,10 @@ struct Beatrix
                 whirlProc3 (inst.whirl, bufC, bufL[0], bufL[1], bufD[0], bufD[1], BUFFER_SIZE_SAMPLES);
             }
 
-            int nread = MIN (nremain, (BUFFER_SIZE_SAMPLES - boffset));
+            int nread = MIN (nremain, (BUFFER_SIZE_SAMPLES - boffset));            
 
             memcpy (&buffer_L[written], &bufL[0][boffset], nread * sizeof (float));
-            memcpy (&buffer_R[written], &bufL[0][boffset], nread * sizeof (float));
+            memcpy (&buffer_R[written], &bufL[1][boffset], nread * sizeof (float));
 
             written += nread;
             boffset += nread;

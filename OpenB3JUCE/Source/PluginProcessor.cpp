@@ -198,7 +198,7 @@ void OpenB3AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
     size_t samplesPerBlock = (size_t)buffer.getNumSamples();
     float* outputChannelData_L = buffer.getWritePointer(0);
     float* outputChannelData_R = buffer.getWritePointer(1);
-    beatrix->get_next_block(outputChannelData_L, outputChannelData_R, 1, samplesPerBlock);
+    beatrix->get_next_block(outputChannelData_L, outputChannelData_R, samplesPerBlock);
 }
 
 //==============================================================================
