@@ -27,7 +27,7 @@ extern "C" {
 #include "overdrive.h"
 #include "program.h"
 #include "reverb.h"
-#include "../tonegen/tonegen.h"
+#include "tonegen.h"
 #include "vibrato.h"
 #include "whirl.h"
 

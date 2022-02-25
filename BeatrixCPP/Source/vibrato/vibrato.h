@@ -25,7 +25,7 @@
 extern "C" {
 #endif
 
-#include "../config/cfgParser.h"
+#include "cfgParser.h"
 
 #define VIB1 0x01
 #define VIB2 0x02

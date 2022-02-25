@@ -29,16 +29,23 @@
 #include <fcntl.h>
 #include <locale.h>
 #include <math.h>
-#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
-#include <sys/time.h>
-#include <unistd.h>
+#ifdef WIN32
+    #define strncasecmp(x,y,z) _strnicmp(x,y,z)
+    #define strcasecmp(x,y) _stricmp(x,y)
+#else
+    #include <strings.h>
+#endif
+#ifdef WIN32
+    #include <Windows.h>
+#else
+    #include <unistd.h>
+#endif
 
-#include "../global_inst.h"
-#include "../main.h"
+#include "global_inst.h"
+#include "main.h"
 #include "program.h"
 
 /* clang-format off */

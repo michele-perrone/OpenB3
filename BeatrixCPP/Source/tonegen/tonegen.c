@@ -29,10 +29,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef WIN32
+#define strncasecmp(x,y,z) _strnicmp(x,y,z)
+#define strcasecmp(x,y) _stricmp(x,y)
+#else
 #include <strings.h>
+#endif
 
-#include "../global_inst.h"
-#include "../global_definitions.h"
+#include "global_inst.h"
+#include "global_definitions.h"
 
 /* These are assertion support macros. */
 /* In range? : A <= V < B  */

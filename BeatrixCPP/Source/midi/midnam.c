@@ -1,6 +1,6 @@
 #define _XOPEN_SOURCE 700
 
-#include "../global_inst.h"
+#include "global_inst.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

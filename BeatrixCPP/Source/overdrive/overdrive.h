@@ -25,8 +25,8 @@
 extern "C" {
 #endif
 
-#include "../config/cfgParser.h"
-#include "../midi/midi.h" // useMIDIControlFunction
+#include "cfgParser.h"
+#include "midi.h" // useMIDIControlFunction
 extern int ampConfig (void* pa, ConfigContext* cfg);
 extern const ConfigDoc* ampDoc ();
 

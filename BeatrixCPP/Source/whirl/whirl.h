@@ -27,8 +27,8 @@
 extern "C" {
 #endif
 
-#include "../config/cfgParser.h" // ConfigContext
-#include "../midi/midi.h"      // useMIDIControlFunction
+#include "cfgParser.h" // ConfigContext
+#include "midi.h"      // useMIDIControlFunction
 
 #define WHIRL_DISPLC_SIZE ((unsigned int)(1 << 14))
 #define WHIRL_DISPLC_MASK ((WHIRL_DISPLC_SIZE)-1)

@@ -27,13 +27,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../config/cfgParser.h"
-#include "../midi/midi.h"
-#include "../main.h"
-#include "../tonegen/tonegen.h"
+#include "cfgParser.h"
+#include "midi.h"
+#include "main.h"
+#include "tonegen.h"
 #include "vibrato.h"
-#include "../main.h"
-#include "../global_definitions.h"
+#include "main.h"
+#include "global_definitions.h"
 
 /*
  * The increment is encoded using a 16-bit fixed-point mantissa.

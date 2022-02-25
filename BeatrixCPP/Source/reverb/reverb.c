@@ -92,7 +92,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../midi/midi.h" // useMIDIControlFunction
+#include "midi.h" // useMIDIControlFunction
 #include "reverb.h"
 
 struct b_reverb*

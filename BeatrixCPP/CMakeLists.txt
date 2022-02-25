@@ -7,7 +7,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
+include_directories(Source)
+include_directories(Source/tonegen)
 include_directories(Source/config)
 include_directories(Source/program)
 include_directories(Source/state)
