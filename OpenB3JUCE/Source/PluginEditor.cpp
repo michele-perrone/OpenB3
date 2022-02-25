@@ -63,12 +63,11 @@ void OpenB3AudioProcessorEditor::resized()
     {
         GridItem(midiKeyboardUpperManual).withArea(1, 1, 2, 4),
         GridItem(midiKeyboardLowerManual).withArea(2, 1, 3, 4),
-        GridItem(midiKeyboardPedalBoard).withWidth(midiKeyboardPedalBoard.getKeyWidth()*n_white_keys_pedalboard+1)
+        GridItem(midiKeyboardPedalBoard).withWidth(midiKeyboardPedalBoard.getKeyWidth()*n_white_keys_pedalboard+0.1)
                                         .withJustifySelf(juce::GridItem::JustifySelf::center)
                                         .withArea(3, 2, 4, 3)
     };
-    Rectangle localBounds = getLocalBounds();
-    grid.performLayout(localBounds);
+    grid.performLayout(getLocalBounds());
 }
 
 void OpenB3AudioProcessorEditor::handleNoteOn (juce::MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
