@@ -33,7 +33,7 @@
     #include <strings.h>
 #endif
 #ifdef WIN32
-    #include <Windows.h>
+    #include <windows.h>
 #else
     #include <unistd.h>
 #endif
