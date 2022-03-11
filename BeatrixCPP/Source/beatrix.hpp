@@ -209,9 +209,13 @@ struct Beatrix
     }
 
     /**** Reverb ****/
-    void set_reverb_wet(float wet)
+    /**
+     * @brief set_reverb_dry_wet 0.0 Dry ... 1.0 wet
+     * @param wet 0.0 Dry ... 1.0 wet
+     */
+    void set_reverb_dry_wet(float wet)
     {
-        setReverbWet(this->inst.reverb, wet);
+        setReverbMix(this->inst.reverb, wet);
     }
 
     /**** Rotary speaker ****/

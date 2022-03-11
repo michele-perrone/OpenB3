@@ -30,7 +30,7 @@ OpenB3AudioProcessor::OpenB3AudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), apvts(*this, nullptr, "Main parameters", createParameters())
 #endif
 {
 }
@@ -195,6 +195,23 @@ void OpenB3AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
         }
     }
 
+    beatrix->set_vibrato_upper(apvts.getRawParameterValue("VIBRATO UPPER")->load());
+    beatrix->set_vibrato_lower(apvts.getRawParameterValue("VIBRATO LOWER")->load());
+    beatrix->set_vibrato(apvts.getRawParameterValue("VIBRATO_CHORUS")->load());
+
+    beatrix->set_percussion_enabled(apvts.getRawParameterValue("PERC_ON_OFF")->load());
+    beatrix->set_percussion_volume(apvts.getRawParameterValue("PERC_SOFT_NORM")->load());
+    beatrix->set_percussion_fast(apvts.getRawParameterValue("PERC_FAST_SLOW")->load());
+    beatrix->set_percussion_first(apvts.getRawParameterValue("PERC_2ND_3RD")->load());
+
+    beatrix->set_preamp_clean(!apvts.getRawParameterValue("OVERDRIVE")->load());
+    beatrix->set_input_gain(apvts.getRawParameterValue("GAIN")->load());
+
+    beatrix->set_rotary_speed(apvts.getRawParameterValue("ROTARY")->load());
+    beatrix->set_reverb_dry_wet(apvts.getRawParameterValue("REVERB")->load());
+
+    beatrix->set_output_gain(apvts.getRawParameterValue("VOLUME")->load());
+
     size_t samplesPerBlock = (size_t)buffer.getNumSamples();
     float* outputChannelData_L = buffer.getWritePointer(0);
     float* outputChannelData_R = buffer.getWritePointer(1);
@@ -232,3 +249,33 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new OpenB3AudioProcessor();
 }
+
+juce::AudioProcessorValueTreeState::ParameterLayout OpenB3AudioProcessor::createParameters()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("VIBRATO UPPER", "Vibrato Upper", false));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("VIBRATO LOWER", "Vibrato Lower", false));
+
+    parameters.push_back(std::make_unique<juce::AudioParameterInt>("VIBRATO_CHORUS", "Vibrato&Chorus", 0, 5, 0));
+
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("PERC_ON_OFF", "Percussion On/Off", false));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("PERC_SOFT_NORM", "Percussion Soft/Norm.", false));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("PERC_FAST_SLOW", "Percussion Fast/Slow", false));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("PERC_2ND_3RD", "Percussion 2nd/3rd", false));
+
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("OVERDRIVE", "Overdrive", false));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", 0.0f, 1.0f, 0.1f));
+
+    parameters.push_back(std::make_unique<juce::AudioParameterInt>("ROTARY", "Rotary", 0, 2, 0));
+
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("REVERB", "Reverb", 0.0f, 1.0f, 0.2f));
+
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("VOLUME", "Volume", 0.0f, 1.0f, 0.5f));
+
+    return  { parameters.begin(), parameters.end() };
+}
+
+
+
+

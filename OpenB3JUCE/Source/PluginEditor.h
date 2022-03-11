@@ -68,5 +68,17 @@ private:
     juce::Slider drawbar_upper[9], drawbar_lower[9], drawbar_pedalboard[2];
     void init_drawbars();
 
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>
+            vibrato_upper_attachment, vibrato_lower_attachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
+            vibrato_chorus_attachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>
+            perc_on_off_attachment, perc_soft_norm_attachment, perc_fast_slow_attachment, perc_2nd_3rd_attachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>
+            overdrive_attachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
+            gain_attachment, rotary_attachment, reverb_attachment, volume_attachment;
+    void create_attachments();
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenB3AudioProcessorEditor)
 };

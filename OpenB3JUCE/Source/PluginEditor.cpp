@@ -30,7 +30,8 @@ OpenB3AudioProcessorEditor::OpenB3AudioProcessorEditor (OpenB3AudioProcessor& p)
 {    
     init_control_board();
     init_drawbars();
-    init_keyboards();    
+    create_attachments();
+    init_keyboards();
     setResizable(true, true);
 
     int screen_width = Desktop::getInstance().getDisplays().getPrimaryDisplay()->userArea.getWidth();
@@ -350,10 +351,10 @@ void OpenB3AudioProcessorEditor::init_control_board()
     volume_label.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(volume_label);
 
-    volume.setRange(0, 1);
+    //volume.setRange(0, 1);
     volume.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     volume.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
-    volume.setValue(0.8);
+    //volume.setValue(0.8);
     addAndMakeVisible(volume);
 }
 
@@ -436,4 +437,38 @@ void OpenB3AudioProcessorEditor::init_keyboards()
     addAndMakeVisible (midiKeyboardPedalBoard);
 
     keyboardState.addListener(this);
+}
+
+void OpenB3AudioProcessorEditor::create_attachments()
+{
+    vibrato_upper_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
+            (audioProcessor.apvts, "VIBRATO UPPER", vibrato_upper);
+    vibrato_lower_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
+            (audioProcessor.apvts, "VIBRATO LOWER", vibrato_lower);
+
+    vibrato_chorus_attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+            (audioProcessor.apvts, "VIBRATO_CHORUS", vibrato_chorus);
+
+    perc_on_off_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
+            (audioProcessor.apvts, "PERC_ON_OFF", perc_on_off);
+    perc_soft_norm_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
+            (audioProcessor.apvts, "PERC_SOFT_NORM", perc_soft_norm);
+    perc_fast_slow_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
+            (audioProcessor.apvts, "PERC_FAST_SLOW", perc_fast_slow);
+    perc_2nd_3rd_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
+            (audioProcessor.apvts, "PERC_2ND_3RD", perc_2nd_3rd);
+
+    overdrive_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
+            (audioProcessor.apvts, "OVERDRIVE", overdrive);
+    gain_attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+            (audioProcessor.apvts, "GAIN", gain);
+
+    rotary_attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+            (audioProcessor.apvts, "ROTARY", rotary);
+
+    reverb_attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+            (audioProcessor.apvts, "REVERB", reverb);
+
+    volume_attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+            (audioProcessor.apvts, "VOLUME", volume);
 }
