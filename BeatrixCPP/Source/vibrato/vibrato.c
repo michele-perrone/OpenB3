@@ -90,7 +90,7 @@ setScannerFrequency (struct b_vibrato* v, double Hertz)
  * table for the processing routine.
  */
 static void
-setVibrato (struct b_vibrato* v, int select)
+set_vibrato (struct b_vibrato* v, int select)
 {
 	switch (select & 3) {
 		case 0: /* disable */
@@ -125,22 +125,22 @@ setVibratoFromMIDI (void* t, unsigned char u)
 	struct b_vibrato* v = &(((struct b_tonegen*)t)->inst_vibrato);
 	switch (u / 23) {
 		case 0:
-			setVibrato (v, VIB1);
+            set_vibrato (v, VIB1);
 			break;
 		case 1:
-			setVibrato (v, CHO1);
+            set_vibrato (v, CHO1);
 			break;
 		case 2:
-			setVibrato (v, VIB2);
+            set_vibrato (v, VIB2);
 			break;
 		case 3:
-			setVibrato (v, CHO2);
+            set_vibrato (v, CHO2);
 			break;
 		case 4:
-			setVibrato (v, VIB3);
+            set_vibrato (v, VIB3);
 			break;
 		case 5:
-			setVibrato (v, CHO3);
+            set_vibrato (v, CHO3);
 			break;
 	}
 }
@@ -290,7 +290,7 @@ init_vibrato (struct b_vibrato* v)
 {
     setScannerFrequency (v, v->vibFqHertz);
 	initIncrementTables (v);
-	setVibrato (v, 0);
+    set_vibrato (v, 0);
 }
 
 void
@@ -303,6 +303,14 @@ initVibrato (void* t, void* m)
 	useMIDIControlFunction (m, "vibrato.upper", setVibratoUpperFromMIDI, t);
 	useMIDIControlFunction (m, "vibrato.lower", setVibratoLowerFromMIDI, t);
 }
+
+void
+setVibrato (void* t, int select)
+{
+    struct b_vibrato* v = &(((struct b_tonegen*)t)->inst_vibrato);
+    set_vibrato(v, select);
+}
+
 
 /*
  * Configuration interface.

@@ -76,9 +76,11 @@ extern void init_vibrato (struct b_vibrato* v);
 /* tonegen integration */
 extern void resetVibrato (void* tonegen);
 extern void initVibrato (void* tonegen, void* m);
+extern void setVibrato (void* t, int select);
 
 extern int scannerConfig (void* t, ConfigContext* cfg);
 extern const ConfigDoc* scannerDoc ();
+
 
 #ifdef __cplusplus
 }
