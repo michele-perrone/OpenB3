@@ -94,9 +94,9 @@ struct Beatrix
 
         fprintf (stderr, "Drawbars : ");
         fflush (stderr);
-        setDrawBars (&inst, 0, defaultPresetUpperManual);
-        setDrawBars (&inst, 1, defaultPresetLowerManual);
-        setDrawBars (&inst, 2, defaultPresetPedalBoard);
+        setDrawBars (&inst, UPPER_MANUAL, defaultPresetUpperManual);
+        setDrawBars (&inst, LOWER_MANUAL, defaultPresetLowerManual);
+        setDrawBars (&inst, PEDAL_BOARD, defaultPresetPedalBoard);
 
         fprintf (stderr, "..done.\n");
         fflush (stderr);
@@ -129,7 +129,7 @@ struct Beatrix
             boffset += nread;
         }
     }
-    /* Keys are numbered as such:
+    /** Keys are numbered as such:
      *   0-- 63, upper manual (  0-- 60 in use)
      *  64--127, lower manual ( 64--124 in use)
      * 128--160, pedal        (128--159 in use)
@@ -142,14 +142,84 @@ struct Beatrix
     {
         oscKeyOff (this->inst.synth, midi_note, midi_note);
     }
+
+    /**** Drawbars ****/
+    /**
+     * @brief Set one of the three drawbars
+     * @param manual UPPER_MANUAL, LOWER_MANUAL, PEDAL_BOARD
+     * @param setting An integer array of length 9, with values from 0 to 8
+     */
     void set_drawbars(unsigned int manual, unsigned int setting[])
     {
         setDrawBars (&this->inst, manual, setting);
     }
+
+    /**** Vibrato ****/
+    void set_vibrato_upper(bool is_enabled)
+    {
+        setVibratoUpper(this->inst.synth, is_enabled);
+    }
+    void set_vibrato_lower(bool is_enabled)
+    {
+        setVibratoLower(this->inst.synth, is_enabled);
+    }
+
+    /**** Vibrato&Chorus ****/
     /**
-     * @brief Set the rotation speed of the leslie speaker
+     * @brief Set the type of vibrato
+     * @param vibrato_type VIB1, VIB2, VIB3, CHO1, CHO2, CHO3
      */
-    void set_leslie_speed(int speed)
+    void set_vibrato(int vibrato_type)
+    {
+        setVibrato(&this->inst.synth->inst_vibrato, vibrato_type);
+    }
+
+    /**** Percussion ****/
+    void set_percussion_enabled(bool is_enabled)
+    {
+        setPercussionEnabled(this->inst.synth, is_enabled);
+    }
+    void set_percussion_fast(bool is_fast)
+    {
+        setPercussionFast(this->inst.synth, is_fast);
+    }
+    void set_percussion_first(bool is_first)
+    {
+        setPercussionFirst(this->inst.synth, is_first);
+    }
+    void set_percussion_volume(bool is_soft)
+    {
+        setPercussionVolume(this->inst.synth, is_soft);
+    }
+
+    /**** Overdrive ****/
+    void set_preamp_clean(bool is_clean)
+    {
+        setClean(this->inst.preamp, is_clean);
+    }
+    void set_input_gain(float gain)
+    {
+        fsetInputGain(this->inst.preamp, gain);
+    }
+
+    /**** Volume ****/
+    void set_output_gain(float gain)
+    {
+        fsetOutputGain(this->inst.preamp, gain);
+    }
+
+    /**** Reverb ****/
+    void set_reverb_wet(float wet)
+    {
+        setReverbWet(this->inst.reverb, wet);
+    }
+
+    /**** Rotary speaker ****/
+    /**
+     * @brief Set the rotary speaker speed
+     * @param speed WHIRL_FAST, WHIRL_STOP, WHIRL_SLOW
+     */
+    void set_rotary_speed(int speed)
     {
         setRevSelect (this->inst.whirl, speed);
     }
