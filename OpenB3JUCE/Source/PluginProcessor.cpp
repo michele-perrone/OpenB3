@@ -1,5 +1,6 @@
 /*
-OpenPiano: an open source piano engine based on physical modeling
+OpenB3: an open source sound synthesis engine and JUCE application/plugin that simulates
+the magnificent sound of the Hammond B3 organ and Leslie rotating speaker
 Copyright (C) 2021-2022 Michele Perrone
 Github: https://github.com/michele-perrone/OpenPiano
 Author e-mail: perrone(dot)michele(at)outlook(dot)com
