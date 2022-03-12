@@ -12,15 +12,16 @@
 
 
 ## What is Open B3?
-Open B3 is the younger brother of [setBfree](https://github.com/pantherb/setBfree):
-> a MIDI-controlled, software synthesizer designed to imitate the sound and properties of the electromechanical organs and sound modification devices that brought world-wide fame to the names and products of Laurens Hammond and Don Leslie.
+Open B3 is the younger sibling of [setBfree](https://github.com/pantherb/setBfree), which is
+> a MIDI-controlled, software synthesizer designed to imitate the sound and properties of the electromechanical organs and sound modification devices that brought world-wide fame to the names and products of Laurens Hammond and Don Leslie.  
+*From (https://github.com/pantherb/setBfree)*
 
-Open B3 is based on [Beatrix](https://github.com/pantherb/setBfree/tree/master/src), the same synthesis engine that powers [setBfree](https://github.com/pantherb/setBfree).  
+Similarly to setBree, Open B3 is powered by the [Beatrix](https://github.com/pantherb/setBfree/tree/master/src) synthesis engine.  
 It comes in two forms:
-1. A simple C++ wrapper around the Beatrix engine, which is written in C. This is done to make the usage of Beatrix more straightforward. It can be found in the [BeatrixCPP](./BeatrixCPP) folder.
-2. A C++ JUCE plugin that is based on [BeatrixCPP](./BeatrixCPP). It can be found in the [OpenB3JUCE](./OpenB3JUCE) folder, and this is what most people will be looking for.
+1. A C++ JUCE plugin that is based on [BeatrixCPP](./BeatrixCPP). It can be found in the [OpenB3JUCE](./OpenB3JUCE) folder, and this is what most people will be looking for.
+2. A simple C++ wrapper around the Beatrix engine, which is written in C. This is done to make the usage of Beatrix more straightforward. It can be found in the [BeatrixCPP](./BeatrixCPP) folder.
 
-#### But *why* do we need Open B3, if there's already setBfree?
+#### Why do we need Open B3, if there's already setBfree?
 setBfree can be downloaded for every major desktop OS and architecture, including the latest M1 Macs, but:
 - the standalone app relies on [JACK](https://jackaudio.org/)
 - the plugin is available in LV2 format only
@@ -52,12 +53,14 @@ OpenB3
 * Linux/macOS and other UNIX/UNIX-based/UNIX-like operating systems: use the command line :wink:
 
 ## Current state and road map
-Open B3 works, but the C++ wrapper doesn't expose all Beatrix's functionality yet. Right now, there's just three keyboards (upper&lower manual and pedalboard). Here's a short list of what needs to be done (it may change frequently):
+Open B3 works, but the C++ wrapper doesn't expose all Beatrix's functionality yet. Here's a short list of what needs to be done (it may change frequently):
 * [x] ~~Fix sample rate setting~~ - Fixed [HERE](https://github.com/michele-perrone/OpenB3/commit/47b80a901304214211a673c8e0176784a26215e3), but maybe `SampleRateD` shouldn't be global
-* [ ] Expose all sound parameters (vibrato, percussion, reverb, whirl, overdrive) - work in progress 
-* [ ] Design and implement a fully resizable in JUCE - work in progress ([00c491b5d28e581899a2c92ce6e37e20fbc08296](https://github.com/michele-perrone/OpenB3/commit/00c491b5d28e581899a2c92ce6e37e20fbc08296))
+* [x] ~~Expose the essential sound parameters (vibrato, vibrato&chorus, percussion, overdrive, rotary speaker speed, reverb, volume)~~ - Done [HERE](https://github.com/michele-perrone/OpenB3/commit/b5e72418c8d0bb947b01c2f1d86eecbff7fc5fa6)
+* [x] ~~Design and implement a fully resizable prototype GUI in JUCE~~ - Done [HERE](https://github.com/michele-perrone/OpenB3/commit/4a248f4adbd07582b7bc59ee0874367c0725cb1e)
+* [ ] Expose all remaining sound parameters (e.g. keyclick, tonewheel model, tuning, rotary speaker speed tuning, ...) and allow their tweaking in the GUI
 * [ ] Expose/implement programs and program changes
 * [ ] Expose/implement configuration file loading and saving
+* [ ] General GUI improvements and cosmetic work
 
 ## Can I contribute to this project?
 Once the project reaches a certain usability level, contributions will be welcome. It would be really nice if improvements upon the sound synthesis engine were also upstreamed into setBfree.
