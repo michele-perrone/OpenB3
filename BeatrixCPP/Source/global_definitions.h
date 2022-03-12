@@ -13,6 +13,10 @@ extern "C" {
 
 extern double SampleRateD;
 
+extern unsigned int defaultPresetUpperManual[9];
+extern unsigned int defaultPresetLowerManual[9];
+extern unsigned int defaultPresetPedalBoard[9];
+
 #ifdef __cplusplus
 }
 #endif

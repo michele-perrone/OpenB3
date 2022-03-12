@@ -20,11 +20,7 @@ struct Beatrix
     float bufJ[2][BUFFER_SIZE_SAMPLES];
 
     char* defaultConfigFile    = NULL;
-    char* defaultProgrammeFile = NULL;
-
-    unsigned int defaultPresetUpperManual[9] = { 8, 8, 6, 0, 0, 0, 0, 0, 0 };
-    unsigned int defaultPresetLowerManual[9] = { 8, 8, 8, 8, 0, 0, 0, 0, 8 };
-    unsigned int defaultPresetPedalBoard[9] =  { 8, 0, 0, 0, 0, 0, 0, 0, 0 };
+    char* defaultProgrammeFile = NULL;    
 
     Beatrix(double sample_rate)
     {
@@ -203,14 +199,14 @@ struct Beatrix
     }
 
     /**** Volume ****/
-    void set_output_gain(float gain)
+    void set_swell(float gain)
     {
-        fsetOutputGain(this->inst.preamp, gain);
+        this->inst.synth->swellPedalGain = this->inst.synth->outputLevelTrim * gain;
     }
 
     /**** Reverb ****/
     /**
-     * @brief set_reverb_dry_wet 0.0 Dry ... 1.0 wet
+     * @brief Set the dry/wet reverb amount
      * @param wet 0.0 Dry ... 1.0 wet
      */
     void set_reverb_dry_wet(float wet)
