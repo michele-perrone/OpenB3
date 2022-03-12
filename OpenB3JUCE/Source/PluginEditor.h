@@ -78,7 +78,11 @@ private:
             overdrive_attachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
             gain_attachment, rotary_attachment, reverb_attachment, volume_attachment;
-    void create_attachments();
+    void init_control_board_attachments();
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>
+            drawbar_upper_attachment[9], drawbar_lower_attachment[9], drawbar_pedalboard_attachment[2];
+    void init_drawbars_attachments();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenB3AudioProcessorEditor)
 };

@@ -145,25 +145,9 @@ bool OpenB3AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) c
 void OpenB3AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
-
-
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
+    // Process the MIDI messages.
+    // Right now, only noteOn/noteOff messages are dealth with.
     keyboardState.processNextMidiBuffer (midiMessages, 0, buffer.getNumSamples(), true);
 
     for (const auto metadata : midiMessages)
@@ -195,6 +179,7 @@ void OpenB3AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
         }
     }
 
+    // Get the control board parameters/settings and forward them to Beatrix
     beatrix->set_vibrato_upper(apvts.getRawParameterValue("VIBRATO UPPER")->load());
     beatrix->set_vibrato_lower(apvts.getRawParameterValue("VIBRATO LOWER")->load());
     beatrix->set_vibrato(apvts.getRawParameterValue("VIBRATO_CHORUS")->load());
@@ -210,8 +195,35 @@ void OpenB3AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
     beatrix->set_rotary_speed(apvts.getRawParameterValue("ROTARY")->load());
     beatrix->set_reverb_dry_wet(apvts.getRawParameterValue("REVERB")->load());
 
-    beatrix->set_output_gain(apvts.getRawParameterValue("VOLUME")->load());
+    beatrix->set_swell(apvts.getRawParameterValue("VOLUME")->load());
 
+    // Get the drawbar settings and forward them to Beatrix
+    uint32_t upper_manual_drawbars[9];
+    char parameterID[24];
+    for(int i = 0; i < 9; i++)
+    {
+        sprintf(parameterID, "DRAWBAR UPPER %i", i);
+        upper_manual_drawbars[i] = apvts.getRawParameterValue(parameterID)->load();
+    }
+    beatrix->set_drawbars(UPPER_MANUAL, upper_manual_drawbars);
+
+    uint32_t lower_manual_drawbars[9];
+    for(int i = 0; i < 9; i++)
+    {
+        sprintf(parameterID, "DRAWBAR LOWER %i", i);
+        lower_manual_drawbars[i] = apvts.getRawParameterValue(parameterID)->load();
+    }
+    beatrix->set_drawbars(LOWER_MANUAL, lower_manual_drawbars);
+
+    uint32_t pedalboard_drawbars[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+    for(int i = 0; i < 2; i++)
+    {
+        sprintf(parameterID, "DRAWBAR PEDALBOARD %i", i);
+        pedalboard_drawbars[i] = apvts.getRawParameterValue(parameterID)->load();
+    }
+    beatrix->set_drawbars(PEDAL_BOARD, pedalboard_drawbars);
+
+    // Compute the next audio block
     size_t samplesPerBlock = (size_t)buffer.getNumSamples();
     float* outputChannelData_L = buffer.getWritePointer(0);
     float* outputChannelData_R = buffer.getWritePointer(1);
@@ -271,7 +283,34 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenB3AudioProcessor::create
 
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("REVERB", "Reverb", 0.0f, 1.0f, 0.2f));
 
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("VOLUME", "Volume", 0.0f, 1.0f, 0.5f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("VOLUME", "Volume", 0.0f, 1.0f, 0.75f));
+
+    char parameterID[24];
+    char parameterName[24];
+
+    for(int i = 0; i < 9; i++)
+    {
+        sprintf(parameterID, "DRAWBAR UPPER %i", i);
+        sprintf(parameterName, "Drawbar Upper %i", i);
+        parameters.push_back(std::make_unique<juce::AudioParameterInt>
+                             (parameterID, parameterName, 0, 8, defaultPresetUpperManual[i]));
+    }
+
+    for(int i = 0; i < 9; i++)
+    {
+        sprintf(parameterID, "DRAWBAR LOWER %i", i);
+        sprintf(parameterName, "Drawbar Lower %i", i);
+        parameters.push_back(std::make_unique<juce::AudioParameterInt>
+                             (parameterID, parameterName, 0, 8, defaultPresetLowerManual[i]));
+    }
+
+    for(int i = 0; i < 2; i++)
+    {
+        sprintf(parameterID, "DRAWBAR PEDALBOARD %i", i);
+        sprintf(parameterName, "Drawbar Pedalboard %i", i);
+        parameters.push_back(std::make_unique<juce::AudioParameterInt>
+                             (parameterID, parameterName, 0, 8, defaultPresetPedalBoard[i]));
+    }
 
     return  { parameters.begin(), parameters.end() };
 }

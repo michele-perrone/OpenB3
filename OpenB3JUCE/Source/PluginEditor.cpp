@@ -29,11 +29,14 @@ OpenB3AudioProcessorEditor::OpenB3AudioProcessorEditor (OpenB3AudioProcessor& p)
       midiKeyboardPedalBoard(audioProcessor.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard)
 {    
     init_control_board();
-    init_drawbars();
-    create_attachments();
-    init_keyboards();
-    setResizable(true, true);
+    init_control_board_attachments();
 
+    init_drawbars();
+    init_drawbars_attachments();
+
+    init_keyboards();
+
+    setResizable(true, true);
     int screen_width = Desktop::getInstance().getDisplays().getPrimaryDisplay()->userArea.getWidth();
     int screen_height = Desktop::getInstance().getDisplays().getPrimaryDisplay()->userArea.getHeight();
     setSize (screen_width*2/3, screen_height*3/4);
@@ -75,8 +78,12 @@ void OpenB3AudioProcessorEditor::resized()
     int triple_margin = margin*3;
 
 
-    /***************************** Row 1 begins ******************************/
+
+    /*************************************************************************/
     /********************* Vibrato and Percussion controls *******************/
+    /*************************************************************************/
+
+    /***************************** Row 1 begins ******************************/    
     Rectangle<int> row_1(area.removeFromTop(row_1_height));
 
     vibrato_lower.setBounds(row_1.removeFromLeft(row_width/10).reduced(triple_margin));
@@ -104,8 +111,12 @@ void OpenB3AudioProcessorEditor::resized()
     /****************************** Row 1 ends *******************************/
 
 
-    /***************************** Row 2 begins ******************************/
+
+    /*************************************************************************/
     /******* Overdrive, Gain, Rotary speaker, Reverb and Volume controls *****/
+    /*************************************************************************/
+
+    /***************************** Row 2 begins ******************************/
     Rectangle<int> row_2(area.removeFromTop(row_2_height));
 
     overdrive.setBounds(row_2.removeFromLeft(row_width/10).reduced(triple_margin));
@@ -133,8 +144,12 @@ void OpenB3AudioProcessorEditor::resized()
     /****************************** Row 2 ends *******************************/
 
 
-    /***************************** Row 3 begins ******************************/
+
+    /*************************************************************************/
     /******************************* Drawbars ********************************/
+    /*************************************************************************/
+
+    /***************************** Row 3 begins ******************************/
     area.removeFromTop(triple_margin);
     Rectangle<int> row_3(area.removeFromTop(row_3_height));
 
@@ -169,7 +184,11 @@ void OpenB3AudioProcessorEditor::resized()
     /****************************** Row 3 ends *******************************/
 
 
+
+    /*************************************************************************/
     /***************** Upper manual, Lower manual, Pedalboard ****************/
+    /*************************************************************************/
+
     /***************************** Row 4 begins ******************************/
     Rectangle<int> row_4(area.removeFromTop(row_4_height));
     float key_width_upper = (row_width)/(float)n_white_keys_manual;
@@ -258,7 +277,7 @@ void OpenB3AudioProcessorEditor::init_control_board()
     V1_label.setJustificationType(juce::Justification::centredRight);
     addAndMakeVisible(V1_label);
 
-    vibrato_chorus.setRange(0, 5, 1);
+    //vibrato_chorus.setRange(0, 5, 1);
     vibrato_chorus.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     //vibrato_chorus.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     //vibrato_chorus.setRotaryParameters(0, 2*M_PI, false);
@@ -309,7 +328,7 @@ void OpenB3AudioProcessorEditor::init_control_board()
     gain_label.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(gain_label);
 
-    gain.setRange(0, 1);
+    //gain.setRange(0, 1);
     gain.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     gain.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
     addAndMakeVisible(gain);
@@ -329,7 +348,7 @@ void OpenB3AudioProcessorEditor::init_control_board()
     rotary_fast_label.setJustificationType(juce::Justification::centredRight);
     addAndMakeVisible(rotary_fast_label);
 
-    rotary.setRange(0, 2, 1);
+    //rotary.setRange(0, 2, 1);
     rotary.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     rotary.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
     rotary.setTitle("Rotary Speaker Control");
@@ -340,7 +359,7 @@ void OpenB3AudioProcessorEditor::init_control_board()
     reverb_label.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(reverb_label);
 
-    reverb.setRange(0, 1);
+    //reverb.setRange(0, 1);
     reverb.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     reverb.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
     reverb.setValue(0.2);
@@ -366,7 +385,7 @@ void OpenB3AudioProcessorEditor::init_drawbars()
     addAndMakeVisible(drawbar_upper_label);
     for(int i = 0; i < 9; i++)
     {
-        drawbar_upper[i].setRange(0, 8, 1);
+        //drawbar_upper[i].setRange(0, 8, 1);
         drawbar_upper[i].setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
         drawbar_upper[i].setTextBoxStyle(juce::Slider::TextBoxBelow, true,
                                          drawbar_upper[i].getTextBoxWidth(), drawbar_upper[i].getTextBoxHeight());
@@ -380,11 +399,11 @@ void OpenB3AudioProcessorEditor::init_drawbars()
     addAndMakeVisible(drawbar_lower_label);
     for(int i = 0; i < 9; i++)
     {
-        drawbar_lower[i].setRange(0, 8, 1);
+        //drawbar_lower[i].setRange(0, 8, 1);
         drawbar_lower[i].setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
         drawbar_lower[i].setTextBoxStyle(juce::Slider::TextBoxBelow, true,
                                          drawbar_lower[i].getTextBoxWidth(), drawbar_lower[i].getTextBoxHeight());
-        drawbar_lower[i].setTitle("lower Manual Drawbar");
+        drawbar_lower[i].setTitle("Lower Manual Drawbar");
         addAndMakeVisible(drawbar_lower[i]);
     }
 
@@ -394,11 +413,11 @@ void OpenB3AudioProcessorEditor::init_drawbars()
     addAndMakeVisible(drawbar_pedalboard_label);
     for(int i = 0; i < 2; i++)
     {
-        drawbar_pedalboard[i].setRange(0, 8, 1);
+        //drawbar_pedalboard[i].setRange(0, 8, 1);
         drawbar_pedalboard[i].setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
         drawbar_pedalboard[i].setTextBoxStyle(juce::Slider::TextBoxBelow, true,
                                          drawbar_pedalboard[i].getTextBoxWidth(), drawbar_pedalboard[i].getTextBoxHeight());
-        drawbar_pedalboard[i].setTitle("pedalboard Manual Drawbar");
+        drawbar_pedalboard[i].setTitle("Pedalboard Drawbar");
         addAndMakeVisible(drawbar_pedalboard[i]);
     }
 }
@@ -439,7 +458,7 @@ void OpenB3AudioProcessorEditor::init_keyboards()
     keyboardState.addListener(this);
 }
 
-void OpenB3AudioProcessorEditor::create_attachments()
+void OpenB3AudioProcessorEditor::init_control_board_attachments()
 {
     vibrato_upper_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
             (audioProcessor.apvts, "VIBRATO UPPER", vibrato_upper);
@@ -471,4 +490,30 @@ void OpenB3AudioProcessorEditor::create_attachments()
 
     volume_attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
             (audioProcessor.apvts, "VOLUME", volume);
+}
+
+void OpenB3AudioProcessorEditor::init_drawbars_attachments()
+{
+    char parameterID[24];
+
+    for(int i = 0; i < 9; i++)
+    {
+        sprintf(parameterID, "DRAWBAR UPPER %i", i);
+        drawbar_upper_attachment[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+                (audioProcessor.apvts, parameterID, drawbar_upper[i]);
+    }
+
+    for(int i = 0; i < 9; i++)
+    {
+        sprintf(parameterID, "DRAWBAR LOWER %i", i);
+        drawbar_lower_attachment[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+                (audioProcessor.apvts, parameterID, drawbar_lower[i]);
+    }
+
+    for(int i = 0; i < 2; i++)
+    {
+        sprintf(parameterID, "DRAWBAR PEDALBOARD %i", i);
+        drawbar_pedalboard_attachment[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+                (audioProcessor.apvts, parameterID, drawbar_pedalboard[i]);
+    }
 }
