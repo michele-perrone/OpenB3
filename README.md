@@ -14,7 +14,7 @@
 ## What is Open B3?
 Open B3 is the younger sibling of [setBfree](https://github.com/pantherb/setBfree), which is
 > a MIDI-controlled, software synthesizer designed to imitate the sound and properties of the electromechanical organs and sound modification devices that brought world-wide fame to the names and products of Laurens Hammond and Don Leslie.  
-*From (https://github.com/pantherb/setBfree)*
+*-- from https://github.com/pantherb/setBfree*
 
 Similarly to setBree, Open B3 is powered by the [Beatrix](https://github.com/pantherb/setBfree/tree/master/src) synthesis engine.  
 It comes in two forms:
@@ -22,17 +22,17 @@ It comes in two forms:
 2. A simple C++ wrapper around the Beatrix engine, which is written in C. This is done to make the usage of Beatrix more straightforward. It can be found in the [BeatrixCPP](./BeatrixCPP) folder.
 
 #### Why do we need Open B3, if there's already setBfree?
-setBfree can be downloaded for every major desktop OS and architecture, including the latest M1 Macs, but:
-- the standalone app relies on [JACK](https://jackaudio.org/)
-- the plugin is available in LV2 format only
+I decided to create Open B3 in order to overcome two major limitations of setBfree:
+- the setBfree standalone app relies on [JACK](https://jackaudio.org/)
+- the setBfree plugin is available in LV2 format only
 
-If you're wondering why is this an issue: people outside the GNU/Linux world rarely venture into installing JACK or using a DAW that supports LV2 plugins. Usually, they have no idea what these things are. This severely limits the potential user base of setBfree. With Open B3, I would like to give Beatrix and setBfree the audience it deserves, since a JUCE plugin can be compiled into
-- all sorts of plugin formats (VST3, AAX, AU, ... and in the near future, even [LV2](https://github.com/juce-framework/JUCE/issues/123))
+People outside the GNU/Linux world rarely venture into installing JACK or using a DAW that supports LV2 plugins (except Reaper). Usually, they have no idea what these two things are. This severely limits the potential user base of setBfree, and it's a shame! With Open B3, I would like to give Beatrix and setBfree the audience they deserve, since a JUCE plugin can be compiled into:
+- all sorts of plugin formats (VST2, VST3, AAX, AU, AUv3, Unity, and in the near future, even [LV2](https://github.com/juce-framework/JUCE/issues/123))
 - standalone desktop apps that make use of the native audio system of each OS (ALSA, Windows Audio, CoreAudio, ...)
 - and even Android/iOS apps!
 
 ## How do I use it?
-A first binary release of Open B3 will be published once the C++ wrapper includes all the basic functionality of Beatrix and once the prototype of the JUCE user interface is completed. Until then, you can build Open B3 yourself (see [building](#building)).
+You can download the latest release for your OS from [here](https://github.com/michele-perrone/OpenB3/releases). Currently, only the standalone apps for Linux x64, Windows x64 and macOS M1 are provided. For the moment, if you want to run Open B3 on other architectures or as a plugin, you have to build it yourself (see [building](#building)).
 
 ## Building
 To build Open B3, you will need CMake (version 3.15 or above), a C++ compiler (C++17 or above), and the latest version of the [JUCE](https://github.com/juce-framework/JUCE) library. Once you clone/download this repository, you need to clone/download a copy of JUCE inside the `OpenB3JUCE/` folder. You end up with this directory structure:
