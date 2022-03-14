@@ -64,23 +64,6 @@
  */
 #define LE_BLOCKSIZE 200
 
-/**
- * Buses are numbered like this:
- *  0-- 8, upper manual, ( 0=16',  8=1')
- *  9--17, lower manual, ( 9=16', 17=1')
- * 18--26, pedal         (18=32')
- */
-#ifndef NOF_BUSES
-#define NOF_BUSES 27 /* Should be in tonegen.h */
-#endif
-
-#define UPPER_BUS_LO 0
-#define UPPER_BUS_END 9
-#define LOWER_BUS_LO 9
-#define LOWER_BUS_END 18
-#define PEDAL_BUS_LO 18
-#define PEDAL_BUS_END 27
-
 /* ****************************************************************/
 /* clang-format off */
 
