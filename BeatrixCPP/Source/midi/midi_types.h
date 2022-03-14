@@ -51,15 +51,19 @@ enum BMIDI_EV_TYPE {
 };
 
 /** internal MIDI event abstraction */
-struct bmidi_event_t {
+struct bmidi_event_t
+{
   enum BMIDI_EV_TYPE type;
   uint8_t channel; /**< the MIDI channel number 0-15 */
-  union {
-    struct {
+  union
+  {
+    struct
+    {
       uint8_t note;
       uint8_t velocity;
     } tone;
-    struct {
+    struct
+    {
       uint8_t param;
       uint8_t value;
     } control;

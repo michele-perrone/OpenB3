@@ -1317,7 +1317,7 @@ process_midi_event (void* instp, const struct bmidi_event_t* ev)
  *  internal MIDI message format  and process the event
  */
 void
-parse_raw_midi_data (void* inst, uint8_t* buffer, size_t size)
+parse_raw_midi_data (void* inst, const uint8_t* buffer, size_t size)
 {
 	struct bmidi_event_t bev;
 	memset (&bev, 0, sizeof (struct bmidi_event_t));
@@ -1339,6 +1339,7 @@ parse_raw_midi_data (void* inst, uint8_t* buffer, size_t size)
 		case 0x90:
 			bev.type            = NOTE_ON;
 			bev.d.tone.note     = buffer[1] & 0x7f;
+            printf("Channel %i - Note %i ON\n", bev.channel, bev.d.tone.note); fflush(stdout);
 			bev.d.tone.velocity = buffer[2] & 0x7f;
 			break;
 		case 0xB0:
