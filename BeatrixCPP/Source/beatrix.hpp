@@ -145,6 +145,12 @@ struct Beatrix
             boffset += nread;
         }
     }
+    void process_midi_message(const uint8_t *midi_buffer, size_t n_messages)
+    {
+        parse_raw_midi_data(&this->inst, midi_buffer, n_messages);
+    }
+
+    /**** Keys ****/
     /** Keys are numbered as such:
      *   0-- 63, upper manual (  0-- 60 in use)
      *  64--127, lower manual ( 64--124 in use)
