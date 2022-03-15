@@ -1338,8 +1338,7 @@ parse_raw_midi_data (void* inst, const uint8_t* buffer, size_t size)
 			break;
 		case 0x90:
 			bev.type            = NOTE_ON;
-			bev.d.tone.note     = buffer[1] & 0x7f;
-            printf("Channel %i - Note %i ON\n", bev.channel, bev.d.tone.note); fflush(stdout);
+            bev.d.tone.note     = buffer[1] & 0x7f;
 			bev.d.tone.velocity = buffer[2] & 0x7f;
 			break;
 		case 0xB0:
