@@ -426,7 +426,7 @@ void OpenB3AudioProcessorEditor::init_drawbars()
 void OpenB3AudioProcessorEditor::init_keyboards()
 {
     n_white_keys_manual = 36; // 5 octaves
-    n_white_keys_pedalboard = 19;
+    n_white_keys_pedalboard = 12;
     n_manuals = 3;
 
     // Upper manual
@@ -450,7 +450,7 @@ void OpenB3AudioProcessorEditor::init_keyboards()
     // Pedal board
     midiKeyboardPedalBoard.setName ("Pedal Board");
     midiKeyboardPedalBoard.setTitle ("Pedal Board");
-    midiKeyboardPedalBoard.setAvailableRange(36, 67);
+    midiKeyboardPedalBoard.setAvailableRange(36, 55);
     midiKeyboardPedalBoard.setOctaveForMiddleC(4);
     midiKeyboardPedalBoard.setMidiChannel(3);
     midiKeyboardPedalBoard.setMidiChannelsToDisplay(0x4);
