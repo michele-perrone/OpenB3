@@ -147,36 +147,20 @@ void OpenB3AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
 {
     juce::ScopedNoDenormals noDenormals;
 
-    // Process the MIDI messages.
-    // Right now, only noteOn/noteOff messages are dealth with.
+    // Process the MIDI messages coming from the keyboards and append them to the midi buffer
     keyboardState.processNextMidiBuffer (midiMessages, 0, buffer.getNumSamples(), true);
 
     for (const auto metadata : midiMessages)
     {
         juce::MidiMessage message = metadata.getMessage();
 
-        switch (message.getChannel())
+        size_t raw_message_size = (size_t)message.getRawDataSize();
+
+        // All messages need to be 3 bytes except program-changes (2 bytes)
+        if(raw_message_size == 2 || raw_message_size == 3)
         {
-        case 1: // Upper Manual
-            if (message.isNoteOn())
-                beatrix->note_on(message.getNoteNumber()-36);
-            else if(message.isNoteOff())
-                beatrix->note_off(message.getNoteNumber()-36);
-            break;
-        case 2: // Lower Manual
-            if (message.isNoteOn())
-                beatrix->note_on(message.getNoteNumber()+28);
-            else if(message.isNoteOff())
-                beatrix->note_off(message.getNoteNumber()+28);
-            break;
-        case 3: // Pedal Board
-            if (message.isNoteOn())
-                beatrix->note_on(message.getNoteNumber()+92);
-            else if(message.isNoteOff())
-                beatrix->note_off(message.getNoteNumber()+92);
-            break;
-        default:
-            break;
+            // Forward the current midi message to Beatrix
+            beatrix->process_midi_message(message.getRawData(), raw_message_size);
         }
     }
 
