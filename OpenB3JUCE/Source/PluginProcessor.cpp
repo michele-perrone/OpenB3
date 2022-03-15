@@ -164,50 +164,6 @@ void OpenB3AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
         }
     }
 
-    // Get the control board parameters/settings and forward them to Beatrix
-    beatrix->set_vibrato_upper(apvts.getRawParameterValue("VIBRATO UPPER")->load());
-    beatrix->set_vibrato_lower(apvts.getRawParameterValue("VIBRATO LOWER")->load());
-    beatrix->set_vibrato(apvts.getRawParameterValue("VIBRATO_CHORUS")->load());
-
-    beatrix->set_percussion_enabled(apvts.getRawParameterValue("PERC_ON_OFF")->load());
-    beatrix->set_percussion_volume(apvts.getRawParameterValue("PERC_SOFT_NORM")->load());
-    beatrix->set_percussion_fast(apvts.getRawParameterValue("PERC_FAST_SLOW")->load());
-    beatrix->set_percussion_first(apvts.getRawParameterValue("PERC_2ND_3RD")->load());
-
-    beatrix->set_preamp_clean(!apvts.getRawParameterValue("OVERDRIVE")->load());
-    beatrix->set_input_gain(apvts.getRawParameterValue("GAIN")->load());
-
-    beatrix->set_rotary_speed(apvts.getRawParameterValue("ROTARY")->load());
-    beatrix->set_reverb_dry_wet(apvts.getRawParameterValue("REVERB")->load());
-
-    beatrix->set_swell(apvts.getRawParameterValue("VOLUME")->load());
-
-    // Get the drawbar settings and forward them to Beatrix
-    uint32_t upper_manual_drawbars[9];
-    char parameterID[24];
-    for(int i = 0; i < 9; i++)
-    {
-        sprintf(parameterID, "DRAWBAR UPPER %i", i);
-        upper_manual_drawbars[i] = apvts.getRawParameterValue(parameterID)->load();
-    }
-    beatrix->set_drawbars(UPPER_MANUAL, upper_manual_drawbars);
-
-    uint32_t lower_manual_drawbars[9];
-    for(int i = 0; i < 9; i++)
-    {
-        sprintf(parameterID, "DRAWBAR LOWER %i", i);
-        lower_manual_drawbars[i] = apvts.getRawParameterValue(parameterID)->load();
-    }
-    beatrix->set_drawbars(LOWER_MANUAL, lower_manual_drawbars);
-
-    uint32_t pedalboard_drawbars[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    for(int i = 0; i < 2; i++)
-    {
-        sprintf(parameterID, "DRAWBAR PEDALBOARD %i", i);
-        pedalboard_drawbars[i] = apvts.getRawParameterValue(parameterID)->load();
-    }
-    beatrix->set_drawbars(PEDAL_BOARD, pedalboard_drawbars);
-
     // Compute the next audio block
     size_t samplesPerBlock = (size_t)buffer.getNumSamples();
     float* outputChannelData_L = buffer.getWritePointer(0);
@@ -252,6 +208,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenB3AudioProcessor::create
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
 
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("VIBRATO UPPER", "Vibrato Upper", false));
+
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("VIBRATO LOWER", "Vibrato Lower", false));
 
     parameters.push_back(std::make_unique<juce::AudioParameterInt>("VIBRATO_CHORUS", "Vibrato&Chorus", 0, 5, 0));
@@ -300,6 +257,90 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenB3AudioProcessor::create
     return  { parameters.begin(), parameters.end() };
 }
 
+void OpenB3AudioProcessor::parameterChanged (const String &parameterID, float newValue)
+{
+    if(parameterID == "VIBRATO UPPER")
+        beatrix->set_vibrato_upper((bool)newValue);
 
+    else if(parameterID == "VIBRATO LOWER")
+        beatrix->set_vibrato_lower((bool)newValue);
 
+    else if(parameterID == "VIBRATO_CHORUS")
+        beatrix->set_vibrato((int)newValue);
 
+    else if(parameterID == "PERC_ON_OFF")
+        beatrix->set_percussion_enabled((bool)newValue);
+    else if(parameterID == "PERC_SOFT_NORM")
+        beatrix->set_percussion_volume((bool)newValue);
+    else if(parameterID == "PERC_FAST_SLOW")
+        beatrix->set_percussion_fast((bool)newValue);
+    else if(parameterID == "PERC_2ND_3RD")
+        beatrix->set_percussion_first((bool)newValue);
+
+    else if(parameterID == "OVERDRIVE")
+        beatrix->set_preamp_clean(!(bool)newValue);
+    else if(parameterID == "GAIN")
+        beatrix->set_input_gain((float)newValue);
+
+    else if(parameterID == "ROTARY")
+        beatrix->set_rotary_speed((int)newValue);
+    else if(parameterID == "REVERB")
+        beatrix->set_reverb_dry_wet((float)newValue);
+
+    else if(parameterID == "VOLUME")
+        beatrix->set_swell((float)newValue);
+
+    else if(parameterID.startsWith("DRAWBAR UPPER"))
+    {
+        uint32_t upper_manual_drawbars[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        char _parameterID[24];
+        for(int i = 0; i < 9; i++)
+        {
+            if(parameterID.endsWithChar(i+'0'))
+            {
+                upper_manual_drawbars[i] = (uint32_t)newValue;
+            }
+            else
+            {
+                sprintf(_parameterID, "DRAWBAR UPPER %i", i);
+                upper_manual_drawbars[i] = apvts.getRawParameterValue(_parameterID)->load();
+            }
+        }
+        beatrix->set_drawbars(UPPER_MANUAL, upper_manual_drawbars);
+    }
+
+    else if(parameterID.startsWith("DRAWBAR LOWER"))
+    {
+        uint32_t lower_manual_drawbars[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        char _parameterID[24];
+        for(int i = 0; i < 9; i++)
+        {
+            if(parameterID.endsWithChar(i+'0'))
+            {
+                lower_manual_drawbars[i] = (uint32_t)newValue;
+            }
+            else
+            {
+                sprintf(_parameterID, "DRAWBAR LOWER %i", i);
+                lower_manual_drawbars[i] = apvts.getRawParameterValue(_parameterID)->load();
+            }
+        }
+        beatrix->set_drawbars(LOWER_MANUAL, lower_manual_drawbars);
+    }
+
+    else if(parameterID.startsWith("DRAWBAR LOWER"))
+    {
+        uint32_t pedalboard_drawbars[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        if(parameterID.endsWithChar('0'))
+        {
+            pedalboard_drawbars[0] = (uint32_t)newValue;
+            pedalboard_drawbars[1] = apvts.getRawParameterValue("DRAWBAR LOWER 1")->load();
+        }
+        else if(parameterID.endsWithChar('1'))
+        {
+            pedalboard_drawbars[1] = apvts.getRawParameterValue("DRAWBAR LOWER 0")->load();
+            pedalboard_drawbars[1] = (uint32_t)newValue;            
+        }
+        beatrix->set_drawbars(PEDAL_BOARD, pedalboard_drawbars);
+    }
+}

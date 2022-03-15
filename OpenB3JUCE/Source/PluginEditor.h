@@ -27,7 +27,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 /**
 */
 
-class OpenB3AudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::MidiKeyboardState::Listener
+class OpenB3AudioProcessorEditor  :
+        public juce::AudioProcessorEditor,
+        public juce::MidiKeyboardState::Listener
 {
 public:
     OpenB3AudioProcessorEditor (OpenB3AudioProcessor&);

@@ -28,7 +28,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //==============================================================================
 /**
 */
-class OpenB3AudioProcessor  : public juce::AudioProcessor
+class OpenB3AudioProcessor  :
+        public juce::AudioProcessor,
+        public juce::AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -68,9 +70,10 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    //==============================================================================
+    //==============================================================================    
     juce::MidiKeyboardState keyboardState;
     juce::AudioProcessorValueTreeState apvts;
+    void parameterChanged (const String &parameterID, float newValue) override;
 
 private:
     //==============================================================================

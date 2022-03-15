@@ -463,34 +463,47 @@ void OpenB3AudioProcessorEditor::init_control_board_attachments()
 {
     vibrato_upper_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
             (audioProcessor.apvts, "VIBRATO UPPER", vibrato_upper);
+    audioProcessor.apvts.addParameterListener("VIBRATO UPPER", &audioProcessor);
+
     vibrato_lower_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
             (audioProcessor.apvts, "VIBRATO LOWER", vibrato_lower);
+    audioProcessor.apvts.addParameterListener("VIBRATO LOWER", &audioProcessor);
 
     vibrato_chorus_attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
             (audioProcessor.apvts, "VIBRATO_CHORUS", vibrato_chorus);
+    audioProcessor.apvts.addParameterListener("VIBRATO_CHORUS", &audioProcessor);
 
     perc_on_off_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
             (audioProcessor.apvts, "PERC_ON_OFF", perc_on_off);
+    audioProcessor.apvts.addParameterListener("PERC_ON_OFF", &audioProcessor);
     perc_soft_norm_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
             (audioProcessor.apvts, "PERC_SOFT_NORM", perc_soft_norm);
+    audioProcessor.apvts.addParameterListener("PERC_SOFT_NORM", &audioProcessor);
     perc_fast_slow_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
             (audioProcessor.apvts, "PERC_FAST_SLOW", perc_fast_slow);
+    audioProcessor.apvts.addParameterListener("PERC_FAST_SLOW", &audioProcessor);
     perc_2nd_3rd_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
             (audioProcessor.apvts, "PERC_2ND_3RD", perc_2nd_3rd);
+    audioProcessor.apvts.addParameterListener("PERC_2ND_3RD", &audioProcessor);
 
     overdrive_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
             (audioProcessor.apvts, "OVERDRIVE", overdrive);
+    audioProcessor.apvts.addParameterListener("OVERDRIVE", &audioProcessor);
     gain_attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
             (audioProcessor.apvts, "GAIN", gain);
+    audioProcessor.apvts.addParameterListener("GAIN", &audioProcessor);
 
     rotary_attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
             (audioProcessor.apvts, "ROTARY", rotary);
+    audioProcessor.apvts.addParameterListener("ROTARY", &audioProcessor);
 
     reverb_attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
             (audioProcessor.apvts, "REVERB", reverb);
+    audioProcessor.apvts.addParameterListener("REVERB", &audioProcessor);
 
     volume_attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
             (audioProcessor.apvts, "VOLUME", volume);
+    audioProcessor.apvts.addParameterListener("VOLUME", &audioProcessor);
 }
 
 void OpenB3AudioProcessorEditor::init_drawbars_attachments()
@@ -502,6 +515,7 @@ void OpenB3AudioProcessorEditor::init_drawbars_attachments()
         sprintf(parameterID, "DRAWBAR UPPER %i", i);
         drawbar_upper_attachment[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
                 (audioProcessor.apvts, parameterID, drawbar_upper[i]);
+        audioProcessor.apvts.addParameterListener(parameterID, &audioProcessor);
     }
 
     for(int i = 0; i < 9; i++)
@@ -509,6 +523,7 @@ void OpenB3AudioProcessorEditor::init_drawbars_attachments()
         sprintf(parameterID, "DRAWBAR LOWER %i", i);
         drawbar_lower_attachment[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
                 (audioProcessor.apvts, parameterID, drawbar_lower[i]);
+        audioProcessor.apvts.addParameterListener(parameterID, &audioProcessor);
     }
 
     for(int i = 0; i < 2; i++)
@@ -516,5 +531,6 @@ void OpenB3AudioProcessorEditor::init_drawbars_attachments()
         sprintf(parameterID, "DRAWBAR PEDALBOARD %i", i);
         drawbar_pedalboard_attachment[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
                 (audioProcessor.apvts, parameterID, drawbar_pedalboard[i]);
+        audioProcessor.apvts.addParameterListener(parameterID, &audioProcessor);
     }
 }
