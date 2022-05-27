@@ -67,6 +67,10 @@ void OpenB3AudioProcessorEditor::resized()
 
 
     Rectangle<int> area(getLocalBounds());
+    int control_board_height = area.getHeight()*0.48;
+    int drawbars_height = area.getHeight()*0.24;
+    int keyboards_height = area.getHeight()*0.28;
+
     int row_1_height = area.getHeight()*0.24;
     int row_2_height = area.getHeight()*0.24;
     int row_3_height = area.getHeight()*0.24;
@@ -84,7 +88,7 @@ void OpenB3AudioProcessorEditor::resized()
     /********************* Vibrato and Percussion controls *******************/
     /*************************************************************************/
 
-    /***************************** Row 1 begins ******************************/    
+    /***************************** Row 1 begins ******************************/
     Rectangle<int> row_1(area.removeFromTop(row_1_height));
 
     vibrato_lower.setBounds(row_1.removeFromLeft(row_width/10).reduced(triple_margin));
@@ -462,12 +466,12 @@ void OpenB3AudioProcessorEditor::init_keyboards()
 void OpenB3AudioProcessorEditor::init_control_board_attachments()
 {
     vibrato_upper_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
-            (audioProcessor.apvts, "VIBRATO UPPER", vibrato_upper);
-    audioProcessor.apvts.addParameterListener("VIBRATO UPPER", &audioProcessor);
+            (audioProcessor.apvts, "VIBRATO_UPPER", vibrato_upper);
+    audioProcessor.apvts.addParameterListener("VIBRATO_UPPER", &audioProcessor);
 
     vibrato_lower_attachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>
-            (audioProcessor.apvts, "VIBRATO LOWER", vibrato_lower);
-    audioProcessor.apvts.addParameterListener("VIBRATO LOWER", &audioProcessor);
+            (audioProcessor.apvts, "VIBRATO_LOWER", vibrato_lower);
+    audioProcessor.apvts.addParameterListener("VIBRATO_LOWER", &audioProcessor);
 
     vibrato_chorus_attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
             (audioProcessor.apvts, "VIBRATO_CHORUS", vibrato_chorus);
@@ -512,7 +516,7 @@ void OpenB3AudioProcessorEditor::init_drawbars_attachments()
 
     for(int i = 0; i < 9; i++)
     {
-        sprintf(parameterID, "DRAWBAR UPPER %i", i);
+        sprintf(parameterID, "DRAWBAR_UPPER_%i", i);
         drawbar_upper_attachment[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
                 (audioProcessor.apvts, parameterID, drawbar_upper[i]);
         audioProcessor.apvts.addParameterListener(parameterID, &audioProcessor);
@@ -520,7 +524,7 @@ void OpenB3AudioProcessorEditor::init_drawbars_attachments()
 
     for(int i = 0; i < 9; i++)
     {
-        sprintf(parameterID, "DRAWBAR LOWER %i", i);
+        sprintf(parameterID, "DRAWBAR_LOWER_%i", i);
         drawbar_lower_attachment[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
                 (audioProcessor.apvts, parameterID, drawbar_lower[i]);
         audioProcessor.apvts.addParameterListener(parameterID, &audioProcessor);
@@ -528,7 +532,7 @@ void OpenB3AudioProcessorEditor::init_drawbars_attachments()
 
     for(int i = 0; i < 2; i++)
     {
-        sprintf(parameterID, "DRAWBAR PEDALBOARD %i", i);
+        sprintf(parameterID, "DRAWBAR_PEDALBOARD_%i", i);
         drawbar_pedalboard_attachment[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
                 (audioProcessor.apvts, parameterID, drawbar_pedalboard[i]);
         audioProcessor.apvts.addParameterListener(parameterID, &audioProcessor);

@@ -207,9 +207,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenB3AudioProcessor::create
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
 
-    parameters.push_back(std::make_unique<juce::AudioParameterBool>("VIBRATO UPPER", "Vibrato Upper", false));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("VIBRATO_UPPER", "Vibrato Upper", false));
 
-    parameters.push_back(std::make_unique<juce::AudioParameterBool>("VIBRATO LOWER", "Vibrato Lower", false));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("VIBRATO_LOWER", "Vibrato Lower", false));
 
     parameters.push_back(std::make_unique<juce::AudioParameterInt>("VIBRATO_CHORUS", "Vibrato&Chorus", 0, 5, 0));
 
@@ -232,7 +232,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenB3AudioProcessor::create
 
     for(int i = 0; i < 9; i++)
     {
-        sprintf(parameterID, "DRAWBAR UPPER %i", i);
+        sprintf(parameterID, "DRAWBAR_UPPER_%i", i);
         sprintf(parameterName, "Drawbar Upper %i", i);
         parameters.push_back(std::make_unique<juce::AudioParameterInt>
                              (parameterID, parameterName, 0, 8, defaultPresetUpperManual[i]));
@@ -240,7 +240,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenB3AudioProcessor::create
 
     for(int i = 0; i < 9; i++)
     {
-        sprintf(parameterID, "DRAWBAR LOWER %i", i);
+        sprintf(parameterID, "DRAWBAR_LOWER_%i", i);
         sprintf(parameterName, "Drawbar Lower %i", i);
         parameters.push_back(std::make_unique<juce::AudioParameterInt>
                              (parameterID, parameterName, 0, 8, defaultPresetLowerManual[i]));
@@ -248,7 +248,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenB3AudioProcessor::create
 
     for(int i = 0; i < 2; i++)
     {
-        sprintf(parameterID, "DRAWBAR PEDALBOARD %i", i);
+        sprintf(parameterID, "DRAWBAR_PEDALBOARD_%i", i);
         sprintf(parameterName, "Drawbar Pedalboard %i", i);
         parameters.push_back(std::make_unique<juce::AudioParameterInt>
                              (parameterID, parameterName, 0, 8, defaultPresetPedalBoard[i]));
@@ -259,10 +259,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout OpenB3AudioProcessor::create
 
 void OpenB3AudioProcessor::parameterChanged (const String &parameterID, float newValue)
 {
-    if(parameterID == "VIBRATO UPPER")
+    if(parameterID == "VIBRATO_UPPER")
         beatrix->set_vibrato_upper((bool)newValue);
 
-    else if(parameterID == "VIBRATO LOWER")
+    else if(parameterID == "VIBRATO_LOWER")
         beatrix->set_vibrato_lower((bool)newValue);
 
     else if(parameterID == "VIBRATO_CHORUS")
@@ -290,7 +290,7 @@ void OpenB3AudioProcessor::parameterChanged (const String &parameterID, float ne
     else if(parameterID == "VOLUME")
         beatrix->set_swell((float)newValue);
 
-    else if(parameterID.startsWith("DRAWBAR UPPER"))
+    else if(parameterID.startsWith("DRAWBAR_UPPER"))
     {
         uint32_t upper_manual_drawbars[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
         char _parameterID[24];
@@ -302,14 +302,14 @@ void OpenB3AudioProcessor::parameterChanged (const String &parameterID, float ne
             }
             else
             {
-                sprintf(_parameterID, "DRAWBAR UPPER %i", i);
+                sprintf(_parameterID, "DRAWBAR_UPPER_%i", i);
                 upper_manual_drawbars[i] = apvts.getRawParameterValue(_parameterID)->load();
             }
         }
         beatrix->set_drawbars(UPPER_MANUAL, upper_manual_drawbars);
     }
 
-    else if(parameterID.startsWith("DRAWBAR LOWER"))
+    else if(parameterID.startsWith("DRAWBAR_LOWER"))
     {
         uint32_t lower_manual_drawbars[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
         char _parameterID[24];
@@ -321,24 +321,24 @@ void OpenB3AudioProcessor::parameterChanged (const String &parameterID, float ne
             }
             else
             {
-                sprintf(_parameterID, "DRAWBAR LOWER %i", i);
+                sprintf(_parameterID, "DRAWBAR_LOWER_%i", i);
                 lower_manual_drawbars[i] = apvts.getRawParameterValue(_parameterID)->load();
             }
         }
         beatrix->set_drawbars(LOWER_MANUAL, lower_manual_drawbars);
     }
 
-    else if(parameterID.startsWith("DRAWBAR LOWER"))
+    else if(parameterID.startsWith("DRAWBAR_LOWER"))
     {
         uint32_t pedalboard_drawbars[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
         if(parameterID.endsWithChar('0'))
         {
             pedalboard_drawbars[0] = (uint32_t)newValue;
-            pedalboard_drawbars[1] = apvts.getRawParameterValue("DRAWBAR LOWER 1")->load();
+            pedalboard_drawbars[1] = apvts.getRawParameterValue("DRAWBAR_LOWER_1")->load();
         }
         else if(parameterID.endsWithChar('1'))
         {
-            pedalboard_drawbars[1] = apvts.getRawParameterValue("DRAWBAR LOWER 0")->load();
+            pedalboard_drawbars[1] = apvts.getRawParameterValue("DRAWBAR_LOWER_0")->load();
             pedalboard_drawbars[1] = (uint32_t)newValue;            
         }
         beatrix->set_drawbars(PEDAL_BOARD, pedalboard_drawbars);
