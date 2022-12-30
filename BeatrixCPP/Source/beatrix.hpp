@@ -38,6 +38,7 @@ struct Beatrix
     float bufD[2][BUFFER_SIZE_SAMPLES]; // drum, tmp.
     float bufL[2][BUFFER_SIZE_SAMPLES]; // leslie, out
     float bufJ[2][BUFFER_SIZE_SAMPLES];
+    int boffset = BUFFER_SIZE_SAMPLES;
 
     char* defaultConfigFile    = NULL;
     char* defaultProgrammeFile = NULL;    
@@ -119,8 +120,6 @@ struct Beatrix
     }
     void get_next_block(float* buffer_L, float* buffer_R, int nframes)
     {
-        int boffset = BUFFER_SIZE_SAMPLES;
-
         int written = 0;
 
         while (written < nframes)
@@ -145,6 +144,7 @@ struct Beatrix
             boffset += nread;
         }
     }
+
     void process_midi_message(const uint8_t *midi_buffer, size_t n_messages)
     {
         parse_raw_midi_data(&this->inst, midi_buffer, n_messages);
